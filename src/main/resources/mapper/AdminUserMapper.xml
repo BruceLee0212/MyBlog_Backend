@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.AdminUserMapper">
+    <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.AdminUser">
+        <id column="email" jdbcType="VARCHAR" property="email" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="fName" jdbcType="VARCHAR" property="fName" />
+        <result column="lName" jdbcType="VARCHAR" property="lName" />
+        <result column="pName" jdbcType="VARCHAR" property="pName" />
+        <result column="locked" jdbcType="TINYINT" property="locked" />
+    </resultMap>
+
+    <select id="login" resultMap="BaseResultMap">
+        select email, password, fName, lName, pName, locked
+        from tb_admin
+        where email = #{account,jdbcType=VARCHAR} AND password=#{password,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select email, password, fName, lName, pName, locked
+        from tb_admin
+        where email = #{account,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.site.blog.my.core.entity.AdminUser">
+        insert into tb_admin (email, password, fName, lName, pName, locked)
+        values (#{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{fName,jdbcType=VARCHAR}, #{lName,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR}, #{locked,jdbcType=TINYINT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.site.blog.my.core.entity.AdminUser">
+        insert into tb_admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null">
+                email,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="fName != null">
+                fName,
+            </if>
+            <if test="lName != null">
+                lName,
+            </if>
+            <if test="pName != null">
+                pName,
+            </if>
+            <if test="locked != null">
+                locked,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="fName != null">
+                #{fName,jdbcType=VARCHAR},
+            </if>
+            <if test="lName != null">
+                #{fName,jdbcType=VARCHAR},
+            </if>
+            <if test="pName != null">
+                #{fName,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null">
+                #{locked,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.site.blog.my.core.entity.AdminUser">
+        update tb_admin
+        <set>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="fName != null">
+                fName = #{fName,jdbcType=VARCHAR},
+            </if>
+            <if test="lName != null">
+                lName = #{lName,jdbcType=VARCHAR},
+            </if>
+            <if test="pName != null">
+                pName = #{pName,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null">
+                locked = #{locked,jdbcType=TINYINT},
+            </if>
+        </set>
+        where email = #{email,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete" parameterType="com.site.blog.my.core.entity.AdminUser">
+        delete from tb_admin
+        where email = #{email,jdbcType=VARCHAR}
+    </delete>
+</mapper>

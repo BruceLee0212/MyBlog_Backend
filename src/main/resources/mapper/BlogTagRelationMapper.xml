@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.BlogTagRelationMapper">
+    <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.BlogTagRelation">
+        <id column="rel_id" jdbcType="BIGINT" property="relationId"/>
+        <result column="rel_owner" jdbcType="VARCHAR" property="relationOwner"/>
+        <result column="rel_blog_id" jdbcType="BIGINT" property="blogId"/>
+        <result column="rel_tag_id" jdbcType="NUMERIC" property="tagId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select rel_id, rel_owner, rel_blog_id, rel_tag_id, create_time
+        from tb_blog_tag_relation
+        where rel_id = #{relationId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByBlogIdAndTagId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select rel_id, rel_owner, rel_blog_id, rel_tag_id, create_time
+        from tb_blog_tag_relation
+        where rel_blog_id = #{blogId,jdbcType=BIGINT} and rel_tag_id = #{tagId,jdbcType=NUMERIC} limit 1
+    </select>
+
+    <select id="selectDistinctTagIds" resultType="java.lang.Integer">
+        select
+        DISTINCT(rel_tag_id)
+        from tb_blog_tag_relation
+        where rel_owner = #{relationOwner,jdbcType=VARCHAR} and rel_tag_id in
+        <foreach item="id" collection="tagIds"  open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tb_blog_tag_relation
+        where rel_id = #{relationId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByBlogId">
+        delete from tb_blog_tag_relation
+        where rel_owner = #{relationOwner,jdbcType=VARCHAR} and rel_blog_id = #{blogId,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.site.blog.my.core.entity.BlogTagRelation">
+        insert into tb_blog_tag_relation (rel_id, rel_owner, rel_blog_id, rel_tag_id, create_time)
+        values (#{relationId,jdbcType=BIGINT}, #{relationOwner, jdbcType=VARCHAR}, #{blogId,jdbcType=BIGINT}, #{tagId,jdbcType=NUMERIC},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.site.blog.my.core.entity.BlogTagRelation">
+        insert into tb_blog_tag_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="relationId != null">
+                rel_id,
+            </if>
+            <if test="relationOwner != null">
+                rel_id,
+            </if>
+            <if test="blogId != null">
+                rel_blog_id,
+            </if>
+            <if test="tagId != null">
+                rel_tag_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="relationId != null">
+                #{relationId,jdbcType=BIGINT},
+            </if>
+            <if test="relationOwner != null">
+                #{relationOwner,jdbcType=VARCHAR},
+            </if>
+            <if test="blogId != null">
+                #{blogId,jdbcType=BIGINT},
+            </if>
+            <if test="tagId != null">
+                #{tagId,jdbcType=NUMERIC},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT into tb_blog_tag_relation(rel_id, rel_owner, rel_blog_id, rel_tag_id, create_time)
+        VALUES
+        <foreach collection="relationList" item="item" separator=",">
+            (#{item.relationId,jdbcType=BIGINT}, #{item.relationOwner, jdbcType=VARCHAR}, #{item.blogId,jdbcType=BIGINT},#{item.tagId,jdbcType=NUMERIC},#{item.createTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.site.blog.my.core.entity.BlogTagRelation">
+        update tb_blog_tag_relation
+        <set>
+            <if test="blogId != null">
+                rel_blog_id = #{blogId,jdbcType=BIGINT},
+            </if>
+            <if test="tagId != null">
+                rel_tag_id = #{tagId,jdbcType=NUMERIC},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where rel_id = #{relationId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.site.blog.my.core.entity.BlogTagRelation">
+        update tb_blog_tag_relation
+        set rel_blog_id = #{blogId,jdbcType=BIGINT},
+            rel_tag_id = #{tagId,jdbcType=NUMERIC},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where rel_id = #{relationId,jdbcType=BIGINT}
+    </update>
+</mapper>

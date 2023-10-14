@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.blog.my.core.dao.TokenMapper">
+    <resultMap id="BaseResultMap" type="com.site.blog.my.core.entity.ConfirmationToken">
+        <id column="token_id" jdbcType="BIGINT" property="tokenId"/>
+        <result column="token_content" jdbcType="VARCHAR" property="tokenContent"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select token_id, token_content, create_time
+        from tb_token
+        where token_id=#{tokenId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="saveToken" parameterType="com.site.blog.my.core.entity.ConfirmationToken">
+        insert into tb_token (token_id, token_content, create_time)
+        values (#{tokenId,jdbcType=BIGINT}, #{tokenContent,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tb_token
+        where token_id=#{tokenID,jdbcType=BIGINT}
+    </delete>
+
+</mapper>
