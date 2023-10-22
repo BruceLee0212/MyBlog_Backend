@@ -54,6 +54,7 @@ public class BlogPageController {
         List<BlogCategory> categoryList = categoryService.getBlogCategories(indexOwner);
         List<BlogLink> linkList = linkService.getBlogLinks(indexOwner);
         Map<String, String> siteConfig = configService.getSiteConfigs(indexOwner);
+        Map<String, String> websiteConfig = configService.getWebsiteConfigs(indexOwner);
         responseMap.put("blogList", blogList);
         responseMap.put("blogCoverList", blogCoverList);
         responseMap.put("tagList", tagList);
@@ -61,6 +62,7 @@ public class BlogPageController {
         responseMap.put("linkList", linkList);
         responseMap.put("footerConfig", configService.getFooterConfigs(indexOwner));
         responseMap.put("siteConfig", siteConfig);
+        responseMap.put("websiteConfig", websiteConfig);
         if(siteConfig.get("websiteIcon") != null && siteConfig.get("websiteIcon").length() > 0){
             responseMap.put("siteIcon", fileStoreService.downloadFile(siteConfig.get("websiteIcon")));
         }
@@ -102,6 +104,8 @@ public class BlogPageController {
                 }
             }
         }
+        Map<String, String> websiteConfig = configService.getWebsiteConfigs(indexOwner);
+        responseMap.put("websiteConfig", websiteConfig);
         responseMap.put("footerConfig", configService.getFooterConfigs(indexOwner));
         responseMap.put("blog", blog);
         responseMap.put("commentList", commentList);

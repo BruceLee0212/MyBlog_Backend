@@ -23,6 +23,10 @@ public interface ConfigService {
      */
     Map<String, String> getSiteConfigs(String configOwner);
     /**
+     * get website config
+     */
+    Map<String, String> getWebsiteConfigs(String configOwner);
+    /**
      * get user's config by config name
      */
     String getConfigByName(String configOwner, String configName);

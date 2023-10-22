@@ -90,8 +90,7 @@ public class ConfigurationController {
                                           @RequestParam(value = "profilePic", required = false) MultipartFile profilePic,
                                           @RequestParam(value = "fName", required = false) String fName,
                                           @RequestParam(value = "lName", required = false) String lName,
-                                          @RequestParam(value = "pName", required = false) String pName,
-                                          @RequestParam(value = "github", required = false) String github) {
+                                          @RequestParam(value = "pName", required = false) String pName) {
         Map<String, Object> responseMap = new HashMap<>();
         if(!StringUtils.hasText(configOwner)){
             responseMap.put("message", "Login to update");
@@ -114,16 +113,6 @@ public class ConfigurationController {
             updateResult += configService.updateConfig(configOwner, "profilePic", path);
         }
         if(adminUserService.updateName(configOwner, fName, lName, pName)) updateResult++;
-        if(StringUtils.hasText(github)) {
-            BlogConfig config = new BlogConfig();
-            config.setConfigId(IDGenerator.generateID());
-            config.setConfigOwner(configOwner);
-            config.setConfigName("github");
-            config.setConfigValue(github);
-            config.setCreateTime(new Date());
-            configService.insert(config);
-            updateResult++;
-        }
         if(updateResult > 0){
             responseMap.put("message", "Update Successfully");
         }
@@ -131,6 +120,40 @@ public class ConfigurationController {
             responseMap.put("message", "Nothing changed");
         }
         return ResponseEntity.ok(responseMap);
+    }
+
+    @PostMapping("/configurations/website")
+    @ResponseBody
+    public ResponseEntity<Object> website(@RequestParam("configOwner") String configOwner,
+                                         @RequestParam(value = "github", required = false) String github,
+                                         @RequestParam(value = "facebook", required = false) String facebook,
+                                         @RequestParam(value = "x", required = false) String x,
+                                         @RequestParam(value = "instagram", required = false) String instagram) {
+        JSONObject response = new JSONObject();
+        if(!StringUtils.hasText(configOwner)){
+            response.put("message", "Login to update");
+            return ResponseEntity.ok(response.toString());
+        }
+        int updateResult = 0;
+        if(StringUtils.hasText(github)) {
+            updateResult += configService.updateConfig(configOwner, "github", github);
+        }
+        if(StringUtils.hasText(facebook)) {
+            updateResult += configService.updateConfig(configOwner, "facebook", facebook);
+        }
+        if(StringUtils.hasText(x)) {
+            updateResult += configService.updateConfig(configOwner, "x", x);
+        }
+        if(StringUtils.hasText(instagram)) {
+            updateResult += configService.updateConfig(configOwner, "instagram", instagram);
+        }
+        if(updateResult > 0){
+            response.put("message", "Update Successfully");
+        }
+        else{
+            response.put("message", "Nothing changed");
+        }
+        return ResponseEntity.ok(response.toString());
     }
 
     @PostMapping("/configurations/footer")

@@ -96,6 +96,20 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
+    public Map<String, String> getWebsiteConfigs(String configOwner){
+        Map<String, String> configMap = new HashMap<>();
+        String github = configMapper.selectByConfigName(configOwner, "github").getConfigValue();
+        String facebook = configMapper.selectByConfigName(configOwner, "facebook").getConfigValue();
+        String x = configMapper.selectByConfigName(configOwner, "x").getConfigValue();
+        String instagram = configMapper.selectByConfigName(configOwner, "instagram").getConfigValue();
+        configMap.put("github", github);
+        configMap.put("facebook", facebook);
+        configMap.put("x", x);
+        configMap.put("instagram", instagram);
+        return configMap;
+    }
+
+    @Override
     public String getConfigByName(String configOwner, String configName) {
         BlogConfig blogConfig = configMapper.selectByConfigName(configOwner, configName);
         return blogConfig == null ? "" : blogConfig.getConfigValue();
